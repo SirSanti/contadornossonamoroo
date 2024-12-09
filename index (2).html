@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Igor + Krislayne</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e2e;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #ff6699;
+        }
+        .carousel-container {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel img {
+            width: 100%;
+            max-width: 200px;
+            display: none;
+            border-radius: 7px;
+        }
+        .carousel img.active {
+            display: block;
+        }
+        .button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ff6699;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #ff3366;
+        }
+        .button.left {
+            left: -30px;
+        }
+        .button.right {
+            right: -30px;
+        }
+        .music-button {
+            position: absolute;
+            right: -20px;
+            bottom: -50px;
+            background-color: #ff6699;
+            border: none;
+            color: white;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        .music-button:hover {
+            background-color: #ff3366;
+            opacity: 1;
+        }
+        .counter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .counter-box {
+            background: #ff6699;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-music" loop>
+        <source src="https://ia903401.us.archive.org/8/items/e-por-voce-que-canto-the-sounds-of-silence-NS9xi3JwJqc/e-por-voce-que-canto-the-sounds-of-silence-NS9xi3JwJqc.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+    <header>❤️Igor+Krislayne❤️</header>
+    <div class="carousel-container">
+        <button class="button left" onclick="prevSlide()">❮</button>
+        <div class="carousel">
+            <img src="https://ia600804.us.archive.org/2/items/whats-app-image-2024-12-09-at-11.45.00/WhatsApp%20Image%202024-12-09%20at%2011.45.00.jpeg" alt="Foto 1" class="active">
+            <img src="https://ia800604.us.archive.org/26/items/whats-app-image-2024-12-09-at-11.45.00-1/WhatsApp%20Image%202024-12-09%20at%2011.45.00%20%281%29.jpeg" alt="Foto 2">
+            <img src="https://ia800604.us.archive.org/3/items/whats-app-image-2024-12-09-at-11.45.00-2_202412/WhatsApp%20Image%202024-12-09%20at%2011.45.00%20%282%29.jpeg" alt="Foto 3">
+        </div>
+        <button class="button right" onclick="nextSlide()">❯</button>
+        <button class="music-button" id="play-music" onclick="playMusic()">🎵 </button>
+    </div>
+    <div class="counter">
+        <div class="counter-box" id="years">0 anos</div>
+        <div class="counter-box" id="months">0 meses</div>
+        <div class="counter-box" id="days">0 dias</div>
+        <div class="counter-box" id="hours">0 horas</div>
+        <div class="counter-box" id="minutes">0 minutos</div>
+        <div class="counter-box" id="seconds">0 segundos</div>
+    </div>
+
+    <script>
+        const startDate = new Date("2024-05-16T00:00:00");
+
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30.44));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("years").textContent = `${years} anos`;
+            document.getElementById("months").textContent = `${months} meses`;
+            document.getElementById("days").textContent = `${days} dias`;
+            document.getElementById("hours").textContent = `${hours} horas`;
+            document.getElementById("minutes").textContent = `${minutes} minutos`;
+            document.getElementById("seconds").textContent = `${seconds} segundos`;
+        }
+
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        const slides = document.querySelectorAll('.carousel img');
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            slides[currentIndex].classList.remove('active');
+            currentIndex = index;
+            slides[currentIndex].classList.add('active');
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentIndex + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(prevIndex);
+        }
+
+        function playMusic() {
+            const audio = document.getElementById('background-music');
+            audio.play().then(() => {
+                const button = document.getElementById('play-music');
+                button.style.display = 'none'; // Oculta o botão após o clique
+            }).catch(error => {
+                console.log('Erro ao tocar música:', error);
+            });
+        }
+    </script>
+</body>
+</html>
